@@ -5,10 +5,17 @@
         <div class="w3ls_footer_grid_left1">
           <h2>Subscribe to us</h2>
           <div class="w3ls_footer_grid_left1_pos">
-            <form action="#" method="post">
-              <input type="email" name="email" placeholder="Your email..." required="">
+            <form action="{{ route('subscribe') }}" method="post">
+              @csrf
+              <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email..." required="">
               <input type="submit" value="Send">
             </form>
+            @if (session('subscribe_success'))
+              <p style="color:#8bc34a; margin-top:8px; font-size:13px;">{{ session('subscribe_success') }}</p>
+            @endif
+            @if ($errors->subscribe->any())
+              <p style="color:#ff8a80; margin-top:8px; font-size:13px;">{{ $errors->subscribe->first('email') }}</p>
+            @endif
           </div>
         </div>
       </div>

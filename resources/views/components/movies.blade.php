@@ -10,6 +10,8 @@
             <div class="tittle-head">
               @if ($genreFilm !== null)
                       <h4 class="latest-text">Movies Of Genre {{ $genreFilm->name }}</h4>
+                    @elseif (request('search'))
+                      <h4 class="latest-text">Hasil Pencarian: "{{ request('search') }}"</h4>
                     @else
                       <h4 class="latest-text">List Of Movies</h4>
                     @endif
@@ -63,6 +65,9 @@
                 @endif
               </div>
                 @endfor
+                @if ($films->count() == 0)
+                  <p style="color:#fff; padding:20px 15px;">Film tidak ditemukan.</p>
+                @endif
               <div class="clearfix"> </div>
             </div>
               </div>
@@ -89,7 +94,7 @@
                               <span class="frist" aria-hidden="true">{{ $numberPage }}</span>
                             </li>
                           @else
-                            <li><a href="?page={{ $numberPage }}" class="frist">{{ $numberPage }}</a></li>
+                            <li><a href="{{ $films->url($numberPage) }}" class="frist">{{ $numberPage }}</a></li>
                           @endif
                         @endfor
                         {{-- Number Page/> --}}

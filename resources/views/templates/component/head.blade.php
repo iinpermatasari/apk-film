@@ -22,6 +22,8 @@
   <!-- list-css -->
   <link rel="stylesheet" href="{{ asset('template/list-css/list.css') }}" type="text/css" media="all" />
   <!-- //list-css -->
+  <!-- perbaikan layout card poster film -->
+  <link rel="stylesheet" href="{{ asset('template/css/movie-grid-fix.css') }}" type="text/css" media="all" />
   <!-- js -->
   <script type="text/javascript" src="{{ asset('template/js/jquery-2.1.4.min.js') }}"></script>
   <!-- //js -->

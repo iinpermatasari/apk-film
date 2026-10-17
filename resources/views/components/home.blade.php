@@ -4,6 +4,7 @@
 <link href="{{ asset('template/css/owl.carousel.css') }}" rel="stylesheet" type="text/css" media="all">
 <!-- banner-slider -->
 <link href="{{ asset('template/css/jquery.slidey.min.css') }}" rel="stylesheet">
+<link href="{{ asset('template/css/hero-fix.css') }}?v=3" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -11,7 +12,7 @@
 <div id="slidey" style="display:none;">
   <ul>
     @foreach ($filmSlidey as $film)
-      <li><img src="{{ $film->poster }}" alt="{{ $film->title }}">
+      <li><img src="{{ asset($film->poster) }}" alt="{{ $film->title }}">
         <p class='title'>{{ $film->title }}</p>
         <p class='description'>{{ $film->sinopsis }}</p>
       </li>

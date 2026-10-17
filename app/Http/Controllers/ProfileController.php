@@ -33,27 +33,26 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the authenticated user's profile.
      */
-    public function show(Profile $profile)
+    public function show()
     {
-        //
+        $profile = auth()->user()->profile;
+
+        return view('components.profile', compact('profile'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the authenticated user's profile.
      */
-    public function edit(Profile $profile)
+    public function update(UpdateProfileRequest $request)
     {
-        //
-    }
+        $profile = auth()->user()->profile;
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProfileRequest $request, Profile $profile)
-    {
-        //
+        $profile->update($request->validated());
+
+        return redirect()->route('profile.show')
+            ->with('success', 'Profil berhasil diperbarui.');
     }
 
     /**

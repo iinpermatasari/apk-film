@@ -36,6 +36,12 @@
               </ul>
             </li>
             <li class="w3_home_act {{ Route::current()->getName() == 'movies' ? 'active' : '' }}"><a href="{{ route('movies') }}">Movies</a></li>
+            @auth
+              @if (auth()->user()->isAdmin())
+                <li class="w3_home_act {{ request()->routeIs('admin.*') ? 'active' : '' }}"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+              @endif
+              <li class="w3_home_act {{ Route::current()->getName() == 'profile.show' ? 'active' : '' }}"><a href="{{ route('profile.show') }}">Profil</a></li>
+            @endauth
 
           </ul>
         </nav>

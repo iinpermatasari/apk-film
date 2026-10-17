@@ -59,7 +59,7 @@
                       <tbody>
                         @foreach ($perans as $peran)
                         <tr>
-                          <td class="w3-list-info">{{ $peran->cast_id }}</td>
+                          <td class="w3-list-info">{{ $peran->cast->name ?? '-' }}</td>
                           <td class="w3-list-info">{{ $peran->actor }}</td>
                         </tr>
                         @endforeach
@@ -117,21 +117,65 @@
         <div class="all-comments">
           <div class="all-comments-info">
             <a href="#">Comments</a>
+
+            @if (session('success'))
+              <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
             <div class="agile-info-wthree-box">
-              <form>
-                <input type="text" placeholder="Name" required="">			           					   
-                <input type="text" placeholder="Email" required="">
-                <input type="text" placeholder="Phone" required="">
-                <textarea placeholder="Message" required=""></textarea>
+              @auth
+              @if ($errors->any())
+                <div class="alert alert-danger">
+                  <ul style="margin:0;">
+                    @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                    @endforeach
+                  </ul>
+                </div>
+              @endif
+              <form action="{{ route('comments.store', $film->id) }}" method="post">
+                @csrf
+                <textarea name="comment" class="comment-input" placeholder="Tulis komentar..." required>{{ old('comment') }}</textarea>
+                <div class="comment-rating-row">
+                  <span class="rating-label">Rating:</span>
+                  <div class="star-rating" data-rating-value="{{ old('rating', 5) }}">
+                    <input type="hidden" name="rating" value="{{ old('rating', 5) }}">
+                    @for ($i = 1; $i <= 5; $i++)
+                      <span class="star" data-value="{{ $i }}">&#9733;</span>
+                    @endfor
+                  </div>
+                </div>			           					   
                 <input type="submit" value="SEND">
                 <div class="clearfix"> </div>
               </form>
+              @else
+                <p>Silakan <a href="#" data-toggle="modal" data-target="#myModal">login</a> untuk menulis komentar.</p>
+              @endauth
             </div>
           </div>
           <div class="media-grids">
             @foreach ($comments as $comment)
               <div class="media">
-                <h5>{{ $comment->user_id }}</h5>
+                @if (auth()->check() && auth()->id() === $comment->user_id)
+                  <div class="comment-menu">
+                    <button type="button" class="comment-menu-toggle" aria-haspopup="true" aria-expanded="false" title="Opsi">
+                      <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </button>
+                    <div class="comment-menu-dropdown">
+                      <button type="button" class="comment-menu-item comment-menu-edit" data-toggle="collapse" data-target="#edit-comment-{{ $comment->id }}">
+                        <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                      </button>
+                      <form action="{{ route('comments.destroy', $comment->id) }}" method="post" class="comment-delete-form" onsubmit="return confirm('Yakin ingin menghapus komentar ini? Tindakan ini tidak dapat dibatalkan.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="comment-menu-item comment-menu-delete">
+                          <i class="fa fa-trash-o" aria-hidden="true"></i> Hapus
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                @endif
+                <h5>{{ $comment->user->name ?? 'User' }}</h5>
                 <div class="media-left">
                   <a href="#">
                     <img src="{{ asset('storage/images/user.jpg') }}" title="One movies" alt=" " />
@@ -139,6 +183,27 @@
                 </div>
                 <div class="media-body">
                   <p>{{ $comment->comment }}</p>
+                  <small>Rating: {{ $comment->rating }}/5</small>
+
+                  @if (auth()->check() && auth()->id() === $comment->user_id)
+                    <div class="collapse" id="edit-comment-{{ $comment->id }}" style="margin-top:8px;">
+                      <form action="{{ route('comments.update', $comment->id) }}" method="post">
+                        @csrf
+                        @method('PUT')
+                        <textarea name="comment" class="form-control comment-input" required>{{ $comment->comment }}</textarea>
+                        <div class="comment-rating-row" style="margin-top:6px;">
+                          <span class="rating-label">Rating:</span>
+                          <div class="star-rating" data-rating-value="{{ $comment->rating }}">
+                            <input type="hidden" name="rating" value="{{ $comment->rating }}">
+                            @for ($i = 1; $i <= 5; $i++)
+                              <span class="star" data-value="{{ $i }}">&#9733;</span>
+                            @endfor
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-xs btn-primary" style="margin-top:6px;">Simpan</button>
+                      </form>
+                    </div>
+                  @endif
                 </div>
               </div>
             @endforeach
@@ -219,4 +284,181 @@
 		$("#video").simplePlayer();
 	});
 </script>
+@endpush
+
+@push('style')
+<style>
+  .comment-input {
+    width: 100% !important;
+    min-height: 90px;
+    border: 1px solid #D4D3D3;
+    padding: 10px;
+    font-size: 13px;
+    outline: none;
+    resize: vertical;
+  }
+  .comment-rating-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 8px;
+    margin: 1em 0;
+  }
+  .comment-rating-row .rating-label {
+    font-size: 13px;
+    color: #666;
+  }
+  .star-rating {
+    font-size: 24px;
+    line-height: 1;
+    color: #ccc;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .star-rating .star {
+    display: inline-block;
+    padding: 0 1px;
+    transition: color .15s, transform .15s;
+    -webkit-transition: color .15s, transform .15s;
+  }
+  .star-rating .star.active {
+    color: #f5b301;
+  }
+  .star-rating .star:hover {
+    -webkit-transform: scale(1.15);
+    -ms-transform: scale(1.15);
+    transform: scale(1.15);
+  }
+  .media {
+    position: relative;
+    overflow: visible;
+  }
+  .comment-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 20;
+  }
+  .comment-menu-toggle {
+    border: 0;
+    background: transparent;
+    color: #9aa0a6;
+    padding: 4px 9px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background .2s, color .2s;
+    -webkit-transition: background .2s, color .2s;
+  }
+  .comment-menu-toggle:hover,
+  .comment-menu.open .comment-menu-toggle {
+    background: #f0f0f0;
+    color: #333;
+  }
+  .comment-menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    min-width: 130px;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
+    padding: 4px;
+    z-index: 30;
+  }
+  .comment-menu.open .comment-menu-dropdown {
+    display: block;
+  }
+  .comment-menu-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: #444;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background .15s, color .15s;
+    -webkit-transition: background .15s, color .15s;
+  }
+  .comment-menu-item i {
+    width: 14px;
+    text-align: center;
+  }
+  .comment-menu-item:hover {
+    background: #f5f5f5;
+    color: #222;
+  }
+  .comment-menu-delete {
+    color: #d9534f;
+  }
+  .comment-menu-delete:hover {
+    background: #fdecea;
+    color: #c9302c;
+  }
+  .comment-delete-form {
+    margin: 0;
+  }
+</style>
+@endpush
+
+@push('script')
+$(function () {
+  $('.star-rating').each(function () {
+    var $box = $(this);
+    var $stars = $box.find('.star');
+    var $input = $box.find('input[name="rating"]');
+    var paint = function (n) {
+      $stars.each(function () {
+        $(this).toggleClass('active', parseInt($(this).data('value'), 10) <= n);
+      });
+    };
+    paint(parseInt($input.val(), 10) || 0);
+    $stars.on('mouseenter', function () { paint(parseInt($(this).data('value'), 10)); });
+    $box.on('mouseleave', function () { paint(parseInt($input.val(), 10) || 0); });
+    $stars.on('click', function () {
+      var n = parseInt($(this).data('value'), 10);
+      $input.val(n);
+      paint(n);
+    });
+  });
+});
+
+$(function () {
+  $(document).on('click', '.comment-menu-toggle', function (e) {
+    e.stopPropagation();
+    var $menu = $(this).closest('.comment-menu');
+    $('.comment-menu').not($menu).removeClass('open');
+    $menu.toggleClass('open');
+  });
+
+  $(document).on('click', '.comment-menu-item', function () {
+    $(this).closest('.comment-menu').removeClass('open');
+  });
+
+  $(document).on('click', function () {
+    $('.comment-menu').removeClass('open');
+  });
+});
 @endpush

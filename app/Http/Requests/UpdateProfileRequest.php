@@ -11,7 +11,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->check();
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'umur' => ['required', 'integer', 'min:1', 'max:150'],
+            'bio' => ['required', 'string', 'max:1000'],
+            'alamat' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:20'],
         ];
     }
 }

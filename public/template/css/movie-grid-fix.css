@@ -1,0 +1,131 @@
+/* =========================================================================
+   movie-grid-fix.css
+   Perbaikan layout card poster film (daftar film & featured movies).
+   Mengganti tata letak float/col-md-* bawaan template dengan CSS Grid
+   supaya kartu rapi, sejajar, dan tidak saling tumpang tindih.
+   Dimuat paling akhir agar menimpa aturan template sebelumnya.
+   ========================================================================= */
+
+/* 1. Kontainer daftar film -> grid responsif yang konsisten */
+.browse-inner,
+.w3_agile_featured_movies {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* clearfix bawaan template tidak diperlukan lagi di dalam grid */
+.browse-inner > .clearfix,
+.w3_agile_featured_movies > .clearfix {
+  display: none !important;
+}
+
+/* 2. Kartu: netralkan float & lebar kolom Bootstrap, jadikan kolom flex */
+.browse-inner > .w3l-movie-gride-agile,
+.w3_agile_featured_movies > .w3l-movie-gride-agile {
+  float: none !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* 3. Kunci area poster dengan rasio tetap (2:3) supaya tidak meluber */
+.browse-inner .w3l-movie-gride-agile > a.hvr-shutter-out-horizontal,
+.w3_agile_featured_movies .w3l-movie-gride-agile > a.hvr-shutter-out-horizontal,
+#owl-demo .w3l-movie-gride-agile1 > a.hvr-shutter-out-horizontal {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.browse-inner .w3l-movie-gride-agile > a.hvr-shutter-out-horizontal img,
+.w3_agile_featured_movies .w3l-movie-gride-agile > a.hvr-shutter-out-horizontal img,
+#owl-demo .w3l-movie-gride-agile1 > a.hvr-shutter-out-horizontal img {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center;
+  margin: 0;
+}
+
+/* 4. Blok teks di bawah poster: fleksibel, tidak bertumpuk */
+.browse-inner .w3l-movie-gride-agile .mid-1,
+.w3_agile_featured_movies .w3l-movie-gride-agile .mid-1 {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 10px 14px;
+  text-align: center;
+}
+
+.browse-inner .w3l-movie-gride-agile .mid-1 .w3l-movie-text,
+.w3_agile_featured_movies .w3l-movie-gride-agile .mid-1 .w3l-movie-text {
+  margin: 0 0 10px;
+}
+
+/* judul maksimal 2 baris agar tinggi kartu seragam */
+.browse-inner .w3l-movie-gride-agile .mid-1 .w3l-movie-text h6 a,
+.w3_agile_featured_movies .w3l-movie-gride-agile .mid-1 .w3l-movie-text h6 a {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.05em;
+  line-height: 1.35;
+  min-height: 2.7em;
+}
+
+/* baris tahun + rating: flex, hilangkan float lama */
+.browse-inner .w3l-movie-gride-agile .mid-1 .mid-2,
+.w3_agile_featured_movies .w3l-movie-gride-agile .mid-1 .mid-2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.browse-inner .w3l-movie-gride-agile .mid-1 .mid-2 p,
+.w3_agile_featured_movies .w3l-movie-gride-agile .mid-1 .mid-2 p {
+  float: none;
+  margin: 0;
+}
+
+.browse-inner .w3l-movie-gride-agile .mid-1 .mid-2 .block-stars,
+.w3_agile_featured_movies .w3l-movie-gride-agile .mid-1 .mid-2 .block-stars {
+  float: none;
+}
+
+/* 5. Sesuaikan jumlah kolom di layar kecil */
+@media (max-width: 991px) {
+  .browse-inner,
+  .w3_agile_featured_movies {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .browse-inner,
+  .w3_agile_featured_movies {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .browse-inner .w3l-movie-gride-agile .mid-1 .w3l-movie-text h6 a,
+  .w3_agile_featured_movies .w3l-movie-gride-agile .mid-1 .w3l-movie-text h6 a {
+    font-size: 0.95em;
+  }
+}

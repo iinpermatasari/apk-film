@@ -14,19 +14,26 @@
               </div>
               <div class="form">
               <h3>Login to your account</h3>
-              <form action="#" method="post">
-                <input type="text" name="Username" placeholder="Username" required="">
-                <input type="password" name="Password" placeholder="Password" required="">
+              <form action="{{ route('login.submit') }}" method="post">
+                @csrf
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="Email" required="">
+                @error('email')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                <input type="password" name="password" placeholder="Password" required="">
                 <input type="submit" value="Login">
               </form>
               </div>
               <div class="form">
               <h3>Create an account</h3>
-              <form action="#" method="post">
-                <input type="text" name="Username" placeholder="Username" required="">
-                <input type="password" name="Password" placeholder="Password" required="">
-                <input type="email" name="Email" placeholder="Email Address" required="">
-                <input type="text" name="Phone" placeholder="Phone Number" required="">
+              <form action="{{ route('register') }}" method="post">
+                @csrf
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="Username" required="">
+                @error('name')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                <input type="password" name="password" placeholder="Password" required="">
+                @error('password')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="Email Address" required="">
+                @error('email')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone Number" required="">
+                @error('phone')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
                 <input type="submit" value="Register">
               </form>
               </div>
@@ -50,4 +57,8 @@
     opacity: "toggle"
     }, "slow");
   });
+
+  @if (! auth()->check() && $errors->any())
+    $(function () { $('#myModal').modal('show'); });
+  @endif
 </script>

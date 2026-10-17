@@ -20,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'profile_id',
     ];
 
     /**
@@ -43,5 +45,37 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Role that belongs to the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Profile that belongs to the user.
+     */
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class);
+    }
+
+    /**
+     * Reviews written by the user.
+     */
+    public function kritiks()
+    {
+        return $this->hasMany(Kritik::class);
+    }
+
+    /**
+     * Apakah user ini memiliki role admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role?->name === 'admin';
     }
 }
