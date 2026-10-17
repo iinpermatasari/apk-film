@@ -216,7 +216,7 @@
           <div class="single-grid-right">
             <div class="single-right-grids">
               <div class="col-md-4 single-right-grid-left">
-                <a href="{{ route('movies.show', $film->id) }}"><img src="/{{ $film->poster }}" alt="" /></a>
+<a href="{{ route('movies.show', $film->id) }}"><img src="{{ asset($film->poster) }}" alt="" /></a>
               </div>
               <div class="col-md-8 single-right-grid-right">
                 <a href="{{ route('movies.show', $film->id) }}" class="title">{{ $film->title }}</a>
@@ -278,7 +278,7 @@
 @endsection
 
 @push('scripts')
-<script src="js/simplePlayer.js"></script>
+<script src="{{ asset('template/js/simplePlayer.js') }}"></script>
 <script>
 	$("document").ready(function() {
 		$("#video").simplePlayer();

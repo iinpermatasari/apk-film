@@ -72,5 +72,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		@stack('script')
 		</script>
 <!-- //here ends scrolling icon -->
+@stack('scripts')
 </body>
 </html>

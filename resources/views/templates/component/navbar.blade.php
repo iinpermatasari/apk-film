@@ -20,9 +20,9 @@
                 <li>
                   <div class="col-sm-4">
                     <ul class="multi-column-dropdown">
-                      @for ($genre = 1; $genre <= $genres->count() - 1; $genre++)
+                      @for ($genre = 0; $genre <= $genres->count() - 1; $genre++)
                         <li><a href="{{ route('genre', $genres[$genre]->id) }}">{{ $genres[$genre]->name }}</a></li>
-                        @if($genre % 7 == 0)
+                        @if(($genre + 1) % 7 == 0)
                           </ul>
                         </div>
                         <div class="col-sm-4">

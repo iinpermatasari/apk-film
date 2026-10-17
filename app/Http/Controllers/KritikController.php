@@ -10,22 +10,6 @@ use App\Http\Requests\UpdateKritikRequest;
 class KritikController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created comment for a film.
      */
     public function store(StoreKritikRequest $request, Film $film)
@@ -38,22 +22,6 @@ class KritikController extends Controller
 
         return redirect()->route('movies.show', $film->id)
             ->with('success', 'Komentar berhasil dikirim.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Kritik $kritik)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Kritik $kritik)
-    {
-        //
     }
 
     /**

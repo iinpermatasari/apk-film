@@ -1,7 +1,6 @@
 @extends('templates.index')
 
 @push('style')
-<link href="{{ asset('template/css/owl.carousel.css') }}" rel="stylesheet" type="text/css" media="all">
 <!-- banner-slider -->
 <link href="{{ asset('template/css/jquery.slidey.min.css') }}" rel="stylesheet">
 <link href="{{ asset('template/css/hero-fix.css') }}?v=3" rel="stylesheet">
@@ -181,31 +180,3 @@
 </div>
 <!-- //general -->
 @endsection
-
-@push('scripts')
-<script type="text/javascript" src="{{ asset('template/js/easing.js') }}"></script>
-<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		$(".scroll").click(function(event){		
-			event.preventDefault();
-			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
-		});
-	});
-</script>
-<!-- start-smoth-scrolling -->
-<script src="{{ asset('template/js/owl.carousel.js') }}"></script>
-<script>
-	$(document).ready(function() { 
-		$("#owl-demo").owlCarousel({
-	 
-		  autoPlay: 3000, //Set AutoPlay to 3 seconds
-	 
-		  items : 5,
-		  itemsDesktop : [640,5],
-		  itemsDesktopSmall : [414,4]
-	 
-		});
-	 
-	}); 
-</script> 
-@endpush
