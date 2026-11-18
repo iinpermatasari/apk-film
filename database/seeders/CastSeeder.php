@@ -20,9 +20,9 @@ class CastSeeder extends Seeder
         for($i = 1; $i <= 50; $i++){
             // insert data ke table cast menggunakan Faker
             \DB::table('casts')->insert([
-                'name' => $faker->name,
+                'name' => $faker->name(),
                 'age' => $faker->numberBetween(7,80),
-                'bio' => $faker->company,
+                'bio' => $faker->company(),
             ]);
         }
 

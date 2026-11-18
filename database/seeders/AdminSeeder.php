@@ -21,7 +21,7 @@ class AdminSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
         $profile = Profile::create([
-            "alamat"    => $faker->address,
+            "alamat"    => $faker->address(),
             "umur"    => $faker->numberBetween(1,50),
             "bio"      => 'administrator',
         ]);

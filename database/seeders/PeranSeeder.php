@@ -22,7 +22,7 @@ class PeranSeeder extends Seeder
             Peran::create([
                 "film_id"    => $faker->numberBetween(1,128),
                 "cast_id"    => $faker->numberBetween(1,50),
-                "actor"      => $faker->jobTitle,
+                "actor"      => $faker->jobTitle(),
             ]);
         }
     }

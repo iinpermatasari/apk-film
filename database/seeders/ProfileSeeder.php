@@ -20,9 +20,9 @@ class ProfileSeeder extends Seeder
         for($loop = 1; $loop <= 10; $loop++)
         {
             Profile::create([
-                "alamat"    => $faker->address,
+                "alamat"    => $faker->address(),
                 "umur"    => $faker->numberBetween(1,50),
-                "bio"      => $faker->jobTitle,
+                "bio"      => $faker->jobTitle(),
             ]);
         }
     }
