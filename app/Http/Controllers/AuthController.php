@@ -27,7 +27,7 @@ class AuthController extends Controller
      */
     public function register(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        $validated = $request->validateWithBag('register', [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:4'],
@@ -69,7 +69,7 @@ class AuthController extends Controller
      */
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
+        $credentials = $request->validateWithBag('login', [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
@@ -77,7 +77,7 @@ class AuthController extends Controller
         // attempt() otomatis mencocokkan password plaintext dengan hash di database.
         if (! Auth::attempt($credentials)) {
             return back()
-                ->withErrors(['email' => 'Email atau password salah.'])
+                ->withErrors(['email' => 'Email atau password salah.'], 'login')
                 ->withInput($request->only('email'));
         }
 

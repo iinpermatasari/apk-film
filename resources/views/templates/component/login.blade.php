@@ -17,8 +17,9 @@
               <form action="{{ route('login.submit') }}" method="post">
                 @csrf
                 <input type="email" name="email" value="{{ old('email') }}" placeholder="Email" required="">
-                @error('email')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                @error('email', 'login')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
                 <input type="password" name="password" placeholder="Password" required="">
+                @error('password', 'login')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
                 <input type="submit" value="Login">
               </form>
               </div>
@@ -26,14 +27,14 @@
               <h3>Create an account</h3>
               <form action="{{ route('register') }}" method="post">
                 @csrf
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="Username" required="">
-                @error('name')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                <input type="text" name="name" value="{{ $errors->register->any() ? old('name') : '' }}" placeholder="Username" required="">
+                @error('name', 'register')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
                 <input type="password" name="password" placeholder="Password" required="">
-                @error('password')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
-                <input type="email" name="email" value="{{ old('email') }}" placeholder="Email Address" required="">
-                @error('email')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
-                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone Number" required="">
-                @error('phone')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                @error('password', 'register')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                <input type="email" name="email" value="{{ $errors->register->any() ? old('email') : '' }}" placeholder="Email Address" required="">
+                @error('email', 'register')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
+                <input type="text" name="phone" value="{{ $errors->register->any() ? old('phone') : '' }}" placeholder="Phone Number" required="">
+                @error('phone', 'register')<span style="display:block;color:#a94442;font-size:13px;">{{ $message }}</span>@enderror
                 <input type="submit" value="Register">
               </form>
               </div>
@@ -58,7 +59,12 @@
     }, "slow");
   });
 
-  @if (! auth()->check() && $errors->any())
+  @if (! auth()->check() && $errors->register->any())
+    $(function () {
+      $('#myModal').modal('show');
+      $('#myModal .toggle').trigger('click');
+    });
+  @elseif (! auth()->check() && $errors->login->any())
     $(function () { $('#myModal').modal('show'); });
   @endif
 </script>
